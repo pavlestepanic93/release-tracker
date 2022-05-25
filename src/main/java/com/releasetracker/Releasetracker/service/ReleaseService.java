@@ -1,13 +1,15 @@
 package com.releasetracker.Releasetracker.service;
 
 import com.releasetracker.Releasetracker.entity.Release;
+import com.releasetracker.Releasetracker.entity.ReleaseStatus;
 import com.releasetracker.Releasetracker.repository.IReleaseRepository;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,10 +20,14 @@ public class ReleaseService implements IReleaseService{
     private IReleaseRepository releaseRepository;
 
     @Override
-    public Release saveRelease(Release release) {
+    public ResponseEntity<String> saveRelease(Release release) {
         release.setCreatedAt(LocalDateTime.now());
         release.setLastUpdateAt(LocalDateTime.now());
-        return releaseRepository.save(release);
+        if(!isReleaseStatusValid(release.getStatus())){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Status is not valid.");
+        }
+        releaseRepository.save(release);
+        return ResponseEntity.status(HttpStatus.OK).body("Release successfully created.");
     }
 
     @Override
@@ -38,12 +44,13 @@ public class ReleaseService implements IReleaseService{
     public Release fetchReleaseByName(String releaseName) { return releaseRepository.findByName(releaseName); }
 
     @Override
-    public void deleteReleaseById(Long releaseId) {
+    public ResponseEntity<String> deleteReleaseById(Long releaseId) {
         releaseRepository.deleteById(releaseId);
+        return ResponseEntity.status(HttpStatus.OK).body("Release successfully deleted.");
     }
 
     @Override
-    public Release updateRelease(Long releaseId, Release release) {
+    public ResponseEntity<String> updateRelease(Long releaseId, Release release) {
         Release releaseFromDb = releaseRepository.findById(releaseId).get();
 
         if(Objects.nonNull(release.getName()) &&
@@ -58,6 +65,9 @@ public class ReleaseService implements IReleaseService{
 
         if(Objects.nonNull(release.getStatus()) &&
                 !"".equalsIgnoreCase(release.getStatus())){
+            if(!isReleaseStatusValid(release.getStatus())){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Status is not valid.");
+            }
             releaseFromDb.setStatus(release.getStatus());
         }
 
@@ -73,7 +83,18 @@ public class ReleaseService implements IReleaseService{
             releaseFromDb.setLastUpdateAt(release.getLastUpdateAt());
         }
         releaseFromDb.setLastUpdateAt(LocalDateTime.now());
-        return releaseRepository.save(releaseFromDb);
+
+        releaseRepository.save(releaseFromDb);
+        return ResponseEntity.status(HttpStatus.OK).body("Release successfully updated.");
+    }
+
+    @Override
+    public Boolean isReleaseStatusValid(String releaseStatus) {
+        for(ReleaseStatus day : ReleaseStatus.values()) {
+            if(day.toString().equals(releaseStatus))
+                return true;
+        }
+        return false;
     }
 
 }
