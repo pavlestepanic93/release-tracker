@@ -1,15 +1,14 @@
 package com.releasetracker.Releasetracker.controller;
-
 import com.releasetracker.Releasetracker.entity.Release;
 import com.releasetracker.Releasetracker.service.ReleaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@RequestMapping("/api")
 public class ReleaseController {
 
     @Autowired
@@ -20,16 +19,10 @@ public class ReleaseController {
         return releaseService.saveRelease(release);
     }
 
-//    @GetMapping("/releases")
-//    public List<Release> fetchReleaseList(){
-//        return releaseService.fetchReleaseList();
-//    }
-
     @GetMapping("/releases")
-    public ResponseEntity<List<Release>> searchReleases(@RequestParam("query") String query){
+    public ResponseEntity<List<Release>> searchReleases(@RequestParam(value = "query", required = false, defaultValue = "") String query){
         return ResponseEntity.ok(releaseService.searchReleases(query));
     }
-
 
     @GetMapping("/releases/{id}")
     public Release fetchReleaseById(@PathVariable("id") Long releaseId){

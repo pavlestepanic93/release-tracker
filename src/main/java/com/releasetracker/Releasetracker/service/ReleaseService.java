@@ -31,11 +31,6 @@ public class ReleaseService implements IReleaseService{
     }
 
     @Override
-    public List<Release> fetchReleaseList() {
-        return releaseRepository.findAll();
-    }
-
-    @Override
     public Release fetchReleaseById(Long releaseId) {
         return releaseRepository.findById(releaseId).get();
     }
