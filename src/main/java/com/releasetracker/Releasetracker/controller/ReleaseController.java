@@ -20,10 +20,16 @@ public class ReleaseController {
         return releaseService.saveRelease(release);
     }
 
+//    @GetMapping("/releases")
+//    public List<Release> fetchReleaseList(){
+//        return releaseService.fetchReleaseList();
+//    }
+
     @GetMapping("/releases")
-    public List<Release> fetchReleaseList(){
-        return releaseService.fetchReleaseList();
+    public ResponseEntity<List<Release>> searchReleases(@RequestParam("query") String query){
+        return ResponseEntity.ok(releaseService.searchReleases(query));
     }
+
 
     @GetMapping("/releases/{id}")
     public Release fetchReleaseById(@PathVariable("id") Long releaseId){
@@ -41,8 +47,4 @@ public class ReleaseController {
         return releaseService.updateRelease(releaseId, release);
     }
 
-    @GetMapping("/releases/name/{name}")
-    public Release fetchReleaseByName(@PathVariable("name") String releaseName){
-        return releaseService.fetchReleaseByName(releaseName);
-    }
 }

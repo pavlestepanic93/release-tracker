@@ -21,13 +21,13 @@ public class Release {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long Id;
+    private Long id;
     @NotBlank(message = "Please Add Release Name")
-    private String Name;
+    private String name;
     @NotBlank(message = "Please Add Release Description")
-    private String Description;
+    private String description;
     @NotBlank(message = "Please Add Release Status")
-    private String Status;
+    private String status;
     @NotNull(message = "Please Add Release Date")
     private Date releaseDate;
     private LocalDateTime createdAt;

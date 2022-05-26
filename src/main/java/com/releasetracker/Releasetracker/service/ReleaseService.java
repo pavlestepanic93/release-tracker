@@ -41,9 +41,6 @@ public class ReleaseService implements IReleaseService{
     }
 
     @Override
-    public Release fetchReleaseByName(String releaseName) { return releaseRepository.findByName(releaseName); }
-
-    @Override
     public ResponseEntity<String> deleteReleaseById(Long releaseId) {
         releaseRepository.deleteById(releaseId);
         return ResponseEntity.status(HttpStatus.OK).body("Release successfully deleted.");
@@ -86,6 +83,12 @@ public class ReleaseService implements IReleaseService{
 
         releaseRepository.save(releaseFromDb);
         return ResponseEntity.status(HttpStatus.OK).body("Release successfully updated.");
+    }
+
+    @Override
+    public List<Release> searchReleases(String query) {
+        List<Release> releases = releaseRepository.searchReleases(query);
+        return releases;
     }
 
     @Override

@@ -5,10 +5,15 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface IReleaseRepository extends JpaRepository<Release, Long> {
 
-    @Query(value = "SELECT * FROM RELEASE R WHERE R.name = ?1", nativeQuery = true)
-    public Release findByName(String Name);
+    @Query(value = "SELECT * FROM release r WHERE " +
+            "r.name LIKE CONCAT('%',:query, '%')" +
+            "Or r.description LIKE CONCAT('%',:query, '%')" +
+            "Or r.status LIKE CONCAT('%',:query, '%')", nativeQuery = true)
+    List<Release> searchReleases(String query);
 
 }
