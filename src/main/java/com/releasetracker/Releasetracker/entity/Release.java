@@ -17,6 +17,7 @@ import java.util.Date;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Release {
 
     @Id
@@ -28,8 +29,7 @@ public class Release {
     private String description;
     @NotBlank(message = "Please Add Release Status")
     private String status;
-    @NotNull(message = "Please Add Release Date")
-    private Date releaseDate;
+    private LocalDateTime releaseDate;
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdateAt;
 

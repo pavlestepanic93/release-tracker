@@ -30,9 +30,8 @@ public class ReleaseController {
     }
 
     @DeleteMapping("/releases/{id}")
-    public String deleteReleaseById(@PathVariable("id") Long releaseId){
-        releaseService.deleteReleaseById(releaseId);
-        return "Release deleted Successfully!!!";
+    public ResponseEntity<String> deleteReleaseById(@PathVariable("id") Long releaseId){
+        return releaseService.deleteReleaseById(releaseId);
     }
 
     @PutMapping("/releases/{id}")
