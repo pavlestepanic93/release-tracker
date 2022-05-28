@@ -1,15 +1,13 @@
 package com.releasetracker.Releasetracker.service;
-
 import com.releasetracker.Releasetracker.entity.Release;
 import com.releasetracker.Releasetracker.entity.ReleaseStatus;
 import com.releasetracker.Releasetracker.repository.IReleaseRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 
@@ -82,8 +80,7 @@ public class ReleaseService implements IReleaseService{
 
     @Override
     public List<Release> searchReleases(String query) {
-        List<Release> releases = releaseRepository.searchReleases(query);
-        return releases;
+        return releaseRepository.searchReleases(query);
     }
 
     @Override
@@ -93,6 +90,16 @@ public class ReleaseService implements IReleaseService{
                 return true;
         }
         return false;
+    }
+
+    private static String castLocalDateTimeToString(LocalDateTime lcd){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return lcd.format(formatter);
+    }
+
+    private static LocalDateTime castStringToLocalDateTime(String lcds){
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        return LocalDateTime.parse(lcds, formatter);
     }
 
 }
