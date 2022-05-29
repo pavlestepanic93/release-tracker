@@ -13,8 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDateTime;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import java.util.ArrayList;
+import java.util.List;
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -28,11 +31,10 @@ class ReleaseControllerTest {
     private ReleaseService releaseService;
 
     private Release release;
-    private Release releaseTwo;
+    private final List<Release> releaseList = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-
         release = Release.builder()
                 .id(1L)
                 .name("Release 1")
@@ -42,7 +44,7 @@ class ReleaseControllerTest {
                 .createdAt(LocalDateTime.now().minusDays(30))
                 .lastUpdateAt(LocalDateTime.now().minusDays(5))
                 .build();
-
+        releaseList.add(release);
     }
 
     @Test
@@ -58,11 +60,12 @@ class ReleaseControllerTest {
 
         mockMvc.perform(post("/api/releases")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content("{\n" +
-                        "  \"description\": \"Description 1\",\n" +
-                        "  \"name\": \"Release 1\",\n" +
-                        "  \"status\": \"Created\"\n" +
-                        "}"))
+                .content("""
+                        {
+                          "description": "Description 1",
+                          "name": "Release 1",
+                          "status": "Created"
+                        }"""))
                 .andExpect(status().isOk());
     }
 
@@ -79,14 +82,37 @@ class ReleaseControllerTest {
     }
 
     @Test
-    void searchReleases() {
+    void searchReleases() throws Exception{
+        Mockito.when(releaseService.searchReleases(""))
+                .thenReturn(releaseList);
 
+        mockMvc.perform(get("/api/releases/?query=")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(jsonPath("$[*].status")
+                .value(containsInAnyOrder("Created")));
     }
+
     @Test
-    void deleteReleaseById() {
+    void deleteReleaseById() throws Exception {
+        Mockito.when(releaseService.deleteReleaseById(1L))
+                .thenReturn(ResponseEntity.status(HttpStatus.OK).body("Release successfully deleted."));
+
+        mockMvc.perform(delete("/api/releases/1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
     }
 
     @Test
     void updateRelease() {
+        Release inputRelease = Release.builder()
+                .name("Release 1")
+                .description("Description 1")
+                .status("On DEV")
+                .build();
+
+        Mockito.when(releaseService.updateRelease(1L, inputRelease))
+                .thenReturn(ResponseEntity.status(HttpStatus.OK).body("Release successfully updated."));
     }
 }
