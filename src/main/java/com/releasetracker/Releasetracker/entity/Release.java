@@ -1,5 +1,6 @@
 package com.releasetracker.Releasetracker.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -29,7 +30,8 @@ public class Release {
     private String description;
     @NotBlank(message = "Please Add Release Status")
     private String status;
-    private LocalDateTime releaseDate;
+    @NotNull(message = "Please Add Release Date")
+    private Date releaseDate;
     private LocalDateTime createdAt;
     private LocalDateTime lastUpdateAt;
 

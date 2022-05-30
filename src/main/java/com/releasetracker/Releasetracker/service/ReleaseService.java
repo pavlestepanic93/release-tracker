@@ -91,15 +91,4 @@ public class ReleaseService implements IReleaseService{
         }
         return false;
     }
-
-    private static String castLocalDateTimeToString(LocalDateTime lcd){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return lcd.format(formatter);
-    }
-
-    private static LocalDateTime castStringToLocalDateTime(String lcds){
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        return LocalDateTime.parse(lcds, formatter);
-    }
-
 }

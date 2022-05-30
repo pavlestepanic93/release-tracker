@@ -12,8 +12,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -35,13 +39,16 @@ class ReleaseControllerTest {
 
     @BeforeEach
     void setUp() {
+        LocalDateTime localDateTime = LocalDateTime.now();
+        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        Date date = Date.from(instant);
         release = Release.builder()
                 .id(1L)
                 .name("Release 1")
                 .description("Description 1")
                 .status("Created")
-                .releaseDate(LocalDateTime.now().minusDays(10))
                 .createdAt(LocalDateTime.now().minusDays(30))
+                .releaseDate(date)
                 .lastUpdateAt(LocalDateTime.now().minusDays(5))
                 .build();
         releaseList.add(release);
