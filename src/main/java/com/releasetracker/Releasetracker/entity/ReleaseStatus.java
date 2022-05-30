@@ -1,9 +1,5 @@
 package com.releasetracker.Releasetracker.entity;
 
-import java.util.ArrayList;
-import java.util.EnumSet;
-import java.util.List;
-
 public enum ReleaseStatus {
     CREATED("Created"),
     IN_DEVELOPMENT("In Development"),
@@ -16,7 +12,7 @@ public enum ReleaseStatus {
 
     private final String toString;
 
-    private ReleaseStatus(String toString) {
+    ReleaseStatus(String toString) {
         this.toString = toString;
     }
 

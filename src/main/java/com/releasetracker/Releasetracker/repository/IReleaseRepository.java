@@ -1,5 +1,4 @@
 package com.releasetracker.Releasetracker.repository;
-
 import com.releasetracker.Releasetracker.entity.Release;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
