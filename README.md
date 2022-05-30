@@ -2,7 +2,7 @@
 ## Overview <br/>
 * This application is a Java task solution to show the level of knowledge in the programming language <br /><br />
 ## Spring Boot(backend) <br />
-* CRUD (REST API) operations are exposed and are unit tests covered<br />
+* CRUD (REST API) + search filter operations are exposed<br />
 * Architecture is 3 layer architecture:<br>
    * Controller<br/>
    * Service(interface and implementation) <br />
@@ -23,4 +23,4 @@ spring.datasource.username=
 spring.datasource.password=
 ```
 ## API Documentation
-* In order to use the Swagger UI(after starting the application), go to URL: http://localhost:8080/swagger-ui.html#/.<br />
+* In order to use the Swagger UI(after starting the application), go to URL: http://localhost:8080/swagger-ui.html#/<br />
